@@ -5,7 +5,10 @@ import com.java_project.JavaProject.api.dto.AddExpenseDto;
 import com.java_project.JavaProject.api.dto.UpdateExpenseDto;
 import com.java_project.JavaProject.domain.expense.Expense;
 import com.java_project.JavaProject.domain.expense.ExpenseRepository;
+import com.java_project.JavaProject.exception.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.query.BadJpqlGrammarException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -47,13 +50,14 @@ public class ExpenseController {
         return expenseRepository.save(newExpense);
     }
 
+
     @PostMapping("/updateExpense/{id}")
     Expense updateExpense(
             @PathVariable Integer id,
             @RequestBody UpdateExpenseDto updateDto){
 
         Expense updatedExpense = expenseRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Nu " +
+                .orElseThrow(()-> new BadRequestException("Nu " +
                         "este urmatoarea achizitie aferenta id-ului: " + id));
 
 
@@ -64,6 +68,16 @@ public class ExpenseController {
         return expenseRepository.save(updatedExpense);
     }
 
+
+    @DeleteMapping("/deleteExpense/{id}")
+    ResponseEntity<String> deleteExpense(@PathVariable Integer id){
+        Expense deletedExpense = expenseRepository.findById(id).
+                orElseThrow(() -> new BadRequestException("Nu " +
+                        "este urmatoarea achizitie aferenta id-ului: " + id));
+
+        expenseRepository.delete(deletedExpense);
+        return ResponseEntity.ok("Achizitia inserata a fost stearsa!");
+    }
 
     @GetMapping
     public String expenseString(){
