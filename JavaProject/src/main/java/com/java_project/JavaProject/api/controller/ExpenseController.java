@@ -1,17 +1,15 @@
-package com.java_project.JavaProject.api;
+package com.java_project.JavaProject.api.controller;
 //Business logic
 
-import com.java_project.JavaProject.api.dto.AddExpenseDto;
-import com.java_project.JavaProject.api.dto.UpdateExpenseDto;
+import com.java_project.JavaProject.api.dto.expenseDto.AddExpenseDto;
+import com.java_project.JavaProject.api.dto.expenseDto.UpdateExpenseDto;
+import com.java_project.JavaProject.domain.category.CategoryRepository;
 import com.java_project.JavaProject.domain.expense.Expense;
 import com.java_project.JavaProject.domain.expense.ExpenseRepository;
 import com.java_project.JavaProject.exception.BadRequestException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.query.BadJpqlGrammarException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,9 +20,16 @@ public class ExpenseController {
 
     //@Autowired
     final ExpenseRepository expenseRepository;
+    final CategoryRepository categoryRepository;
 
-    public ExpenseController(ExpenseRepository expenseRepository) {
+    public ExpenseController(ExpenseRepository expenseRepository, CategoryRepository categoryRepository) {
         this.expenseRepository = expenseRepository;
+        this.categoryRepository = categoryRepository;
+    }
+
+    @GetMapping
+    public String expenseString(){
+        return "Expense example";
     }
 
     @GetMapping("/expenses")
@@ -42,10 +47,15 @@ public class ExpenseController {
     @PostMapping("/addExpense")
     Expense addExpense(@RequestBody AddExpenseDto addDto){
 
+        categoryRepository.findById(addDto.getCategoryId())
+                .orElseThrow(()->new BadRequestException("Nu " +
+                        "exista categoria selectata"));
+
         Expense newExpense = new Expense();
         newExpense.setAmount(addDto.getAmount());
         newExpense.setDescription(addDto.getDescription());
         newExpense.setDate(addDto.getDate());
+        newExpense.setCategoryId(addDto.getCategoryId());
 
         return expenseRepository.save(newExpense);
     }
@@ -64,6 +74,7 @@ public class ExpenseController {
         updatedExpense.setAmount(updateDto.getAmount());
         updatedExpense.setDescription(updateDto.getDescription());
         updatedExpense.setDate(updateDto.getDate());
+        updatedExpense.setCategoryId(updateDto.getCategoryId());
 
         return expenseRepository.save(updatedExpense);
     }
@@ -79,9 +90,15 @@ public class ExpenseController {
         return ResponseEntity.ok("Achizitia inserata a fost stearsa!");
     }
 
-    @GetMapping
-    public String expenseString(){
-        return "Expense example";
-    }
 
+    @GetMapping("/category/{categoryId}")
+    List<Expense> gellAllExpensesByCategoryId(
+            @PathVariable Integer categoryId
+    ) {
+        categoryRepository.findById(categoryId)
+                .orElseThrow(()->new BadRequestException("Nu " +
+                        "exista categoria selectata"));
+
+        return expenseRepository.findAllByCategoryId(categoryId);
+    }
 }

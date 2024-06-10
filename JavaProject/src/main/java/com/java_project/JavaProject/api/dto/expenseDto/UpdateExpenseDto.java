@@ -1,12 +1,12 @@
-package com.java_project.JavaProject.api.dto;
+package com.java_project.JavaProject.api.dto.expenseDto;
 
 import java.time.LocalDateTime;
 
-public class AddExpenseDto {
-
+public class UpdateExpenseDto {
     double amount;
     String description;
     LocalDateTime date;
+    int categoryId;
 
     public double getAmount() {
         return amount;
@@ -30,5 +30,13 @@ public class AddExpenseDto {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 }

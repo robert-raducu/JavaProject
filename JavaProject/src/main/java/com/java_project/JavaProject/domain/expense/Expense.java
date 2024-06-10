@@ -14,6 +14,8 @@ public class Expense {
     double amount;
     String description;
     LocalDateTime date;
+    int categoryId;
+
 
     public int getId() {
         return id;
@@ -45,5 +47,12 @@ public class Expense {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 }
