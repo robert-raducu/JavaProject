@@ -47,15 +47,14 @@ public class UserController {
         return userRepository.save(newUser);
     }
 
-    @PostMapping("/updateUser/{id}")
+    @PatchMapping("/updateUser/{id}")
     User updateUser(
             @PathVariable Integer id,
             @RequestBody UpdateUserDto updateDto
             ){
 
         User updatedUser = userRepository.findById(id)
-                .orElseThrow(()-> new BadRequestException("Nu " +
-                        "este urmatoaul utilizator aferent id-ului: " + id));
+                .orElseThrow(()-> new BadRequestException("No user found with id: " + id));
 
         updatedUser.setName(updateDto.getName());
         updatedUser.setAge(updateDto.getAge());

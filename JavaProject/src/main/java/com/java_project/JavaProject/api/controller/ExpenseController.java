@@ -61,14 +61,14 @@ public class ExpenseController {
     }
 
 
-    @PostMapping("/updateExpense/{id}")
+    @PatchMapping("/updateExpense/{id}")
     Expense updateExpense(
             @PathVariable Integer id,
             @RequestBody UpdateExpenseDto updateDto){
 
         Expense updatedExpense = expenseRepository.findById(id)
-                .orElseThrow(()-> new BadRequestException("Nu " +
-                        "este urmatoarea achizitie aferenta id-ului: " + id));
+                .orElseThrow(()-> new BadRequestException("No expense" +
+                        "available for this id: " + id));
 
 
         updatedExpense.setAmount(updateDto.getAmount());
@@ -82,12 +82,12 @@ public class ExpenseController {
 
     @DeleteMapping("/deleteExpense/{id}")
     ResponseEntity<String> deleteExpense(@PathVariable Integer id){
-        Expense deletedExpense = expenseRepository.findById(id).
-                orElseThrow(() -> new BadRequestException("Nu " +
-                        "este urmatoarea achizitie aferenta id-ului: " + id));
+        Expense deletedExpense = expenseRepository.findById(id)
+                .orElseThrow(()-> new BadRequestException("No expense" +
+                "available for this id: " + id));
 
         expenseRepository.delete(deletedExpense);
-        return ResponseEntity.ok("Achizitia inserata a fost stearsa!");
+        return ResponseEntity.ok("Your expense was successfully deleted!");
     }
 
 
