@@ -14,6 +14,8 @@ public class User {
     String city;
     String job;
     double salary;
+    @Column(name="remaining_salary")
+    double remainingSalary;
 
     public int getId() {
         return id;
@@ -61,5 +63,13 @@ public class User {
 
     public void setSalary(double salary) {
         this.salary = salary;
+    }
+
+    public double getRemainingSalary() {
+        return remainingSalary;
+    }
+
+    public void setRemainingSalary(double remainingSalary) {
+        this.remainingSalary = remainingSalary;
     }
 }

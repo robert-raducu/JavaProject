@@ -9,6 +9,7 @@ public class AddExpenseDto {
     String description;
     LocalDateTime date;
     int categoryId;
+    int userId;
 
     public double getAmount() {
         return amount;
@@ -39,5 +40,13 @@ public class AddExpenseDto {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

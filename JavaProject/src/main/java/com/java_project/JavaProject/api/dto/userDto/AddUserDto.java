@@ -6,6 +6,7 @@ public class AddUserDto {
     String city;
     String job;
     double salary;
+    double remainingSalary;
 
     public String getName() {
         return name;
@@ -45,5 +46,9 @@ public class AddUserDto {
 
     public void setSalary(double salary) {
         this.salary = salary;
+    }
+
+    public double getRemainingSalary() {
+        return remainingSalary;
     }
 }

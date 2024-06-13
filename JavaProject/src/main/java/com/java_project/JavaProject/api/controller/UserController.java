@@ -2,6 +2,7 @@ package com.java_project.JavaProject.api.controller;
 
 import com.java_project.JavaProject.api.dto.userDto.AddUserDto;
 import com.java_project.JavaProject.api.dto.userDto.UpdateUserDto;
+import com.java_project.JavaProject.domain.expense.ExpenseRepository;
 import com.java_project.JavaProject.domain.user.User;
 import com.java_project.JavaProject.domain.user.UserRepository;
 import com.java_project.JavaProject.exception.BadRequestException;
@@ -15,9 +16,11 @@ import java.util.List;
 public class UserController {
 
     final UserRepository userRepository;
+    final ExpenseRepository expenseRepository;
 
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, ExpenseRepository expenseRepository) {
         this.userRepository = userRepository;
+        this.expenseRepository = expenseRepository;
     }
 
     @GetMapping
@@ -43,6 +46,7 @@ public class UserController {
         newUser.setCity(addDto.getCity());
         newUser.setJob(addDto.getJob());
         newUser.setSalary(addDto.getSalary());
+        newUser.setRemainingSalary(addDto.getSalary());
 
         return userRepository.save(newUser);
     }
@@ -61,6 +65,7 @@ public class UserController {
         updatedUser.setCity(updateDto.getCity());
         updatedUser.setJob(updateDto.getJob());
         updatedUser.setSalary(updateDto.getSalary());
+        updatedUser.setRemainingSalary(updateDto.getRemainingSalary());
 
         return userRepository.save(updatedUser);
     }
@@ -68,11 +73,10 @@ public class UserController {
     @DeleteMapping("/deleteUser/{id}")
     ResponseEntity<String> deleteUser (@PathVariable Integer id){
         User deletedUser = userRepository.findById(id)
-                .orElseThrow(() -> new BadRequestException("Nu " +
-                "este urmatoarul user aferent id-ului: " + id));
+                .orElseThrow(() -> new BadRequestException("No user found with id: " + id));
 
         userRepository.delete(deletedUser);
-        return ResponseEntity.ok("Utilizatorul a fost sters");
+        return ResponseEntity.ok("The user was successfully deleted!");
 
     }
 

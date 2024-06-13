@@ -60,6 +60,6 @@ public class CategoryController {
                         "available for this id: " + id));
 
         categoryRepository.delete(deletedCategory);
-        return ResponseEntity.ok("Your category was successfully deleted!");
+        return ResponseEntity.ok("The category was successfully deleted!");
     }
 }

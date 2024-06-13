@@ -14,7 +14,10 @@ public class Expense {
     double amount;
     String description;
     LocalDateTime date;
+    @Column(name = "category_id")
     int categoryId;
+    @Column(name = "user_id")
+    int userId;
 
 
     public int getId() {
@@ -54,5 +57,13 @@ public class Expense {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

@@ -6,6 +6,7 @@ public class UpdateUserDto {
     String city;
     String job;
     double salary;
+    double remainingSalary;
 
     public String getName() {
         return name;
@@ -45,5 +46,13 @@ public class UpdateUserDto {
 
     public void setSalary(double salary) {
         this.salary = salary;
+    }
+
+    public double getRemainingSalary() {
+        return remainingSalary;
+    }
+
+    public void setRemainingSalary(double remainingSalary) {
+        this.remainingSalary = remainingSalary;
     }
 }
