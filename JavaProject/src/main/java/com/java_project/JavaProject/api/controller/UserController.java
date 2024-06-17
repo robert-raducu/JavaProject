@@ -2,6 +2,7 @@ package com.java_project.JavaProject.api.controller;
 
 import com.java_project.JavaProject.api.dto.userDto.AddUserDto;
 import com.java_project.JavaProject.api.dto.userDto.UpdateUserDto;
+import com.java_project.JavaProject.domain.expense.Expense;
 import com.java_project.JavaProject.domain.expense.ExpenseRepository;
 import com.java_project.JavaProject.domain.user.User;
 import com.java_project.JavaProject.domain.user.UserRepository;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/UserPage")
 public class UserController {
 
     final UserRepository userRepository;
@@ -25,7 +26,7 @@ public class UserController {
 
     @GetMapping
     public String userString(){
-        return "User example";
+        return "Welcome to the users page!";
     }
 
     @GetMapping("/users")
@@ -33,7 +34,7 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/user/{id}")
     User getAllUsers(@PathVariable Integer id){
         return userRepository.findById(id).get();
     }
@@ -79,6 +80,4 @@ public class UserController {
         return ResponseEntity.ok("The user was successfully deleted!");
 
     }
-
-
 }

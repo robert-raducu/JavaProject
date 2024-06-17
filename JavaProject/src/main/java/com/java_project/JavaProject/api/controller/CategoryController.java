@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/category")
+@RequestMapping("/api/CategoryPage")
 public class CategoryController {
 
     final CategoryRepository categoryRepository;
@@ -20,12 +20,17 @@ public class CategoryController {
         this.categoryRepository = categoryRepository;
     }
 
+    @GetMapping
+    public String userString(){
+        return "Welcome to the categories page!";
+    }
+
     @GetMapping("/categories")
     public List<Category> getallCategories(){
         return categoryRepository.findAll();
     }
 
-    @GetMapping("/categories/{id}")
+    @GetMapping("/category/{id}")
     Category getAllCategories(@PathVariable Integer id){
         return categoryRepository.findById(id).get();
     }

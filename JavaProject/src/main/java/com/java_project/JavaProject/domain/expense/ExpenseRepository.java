@@ -17,4 +17,9 @@ public interface ExpenseRepository extends JpaRepository<Expense, Integer> {
             SELECT e FROM Expense e WHERE e.categoryId = :categoryId
             """)
     List<Expense> findAllByCategoryId(Integer categoryId);
+
+    @Query("""
+            SELECT e FROM Expense e WHERE e.userId = :userId
+            """)
+    List<Expense> findAllByUserId(Integer userId);
 }

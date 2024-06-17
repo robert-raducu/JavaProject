@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 //request-urile care vin pe calea adaugata, vor ajunge in zona aceasta de cod
 //prima parte a denumirii endpoint ului
-@RequestMapping("/api/expense")
+@RequestMapping("/api/ExpensePage")
 public class ExpenseController {
 
     //@Autowired
@@ -34,7 +34,7 @@ public class ExpenseController {
 
     @GetMapping
     public String expenseString(){
-        return "Expense example";
+        return "Welcome to the expenses page!";
     }
 
     @GetMapping("/expenses")
@@ -43,7 +43,7 @@ public class ExpenseController {
     }
 
     //returneaza un singur expense
-    @GetMapping("/expenses/{id}")
+    @GetMapping("/expense/{id}")
     Expense getAllExpenses(@PathVariable Integer id){
         return expenseRepository.findById(id).get();
     }
@@ -60,6 +60,7 @@ public class ExpenseController {
         if (addDto.getAmount() > userTemp.getRemainingSalary()) {
             throw new BadRequestException("Expense amount exceeds remaining salary.");
         }
+
 
         //RemainingSalary logic
         double remainingSalary = userTemp.getRemainingSalary();
@@ -137,7 +138,7 @@ public class ExpenseController {
 
 
     //get all expenses from a category
-    @GetMapping("/category/{categoryId}")
+    @GetMapping("/filterExpenseByCategory/{categoryId}")
     List<Expense> gellAllExpensesByCategoryId(
             @PathVariable Integer categoryId
     ) {
@@ -145,5 +146,16 @@ public class ExpenseController {
                 .orElseThrow(()->new BadRequestException("The selected category does not exist"));
 
         return expenseRepository.findAllByCategoryId(categoryId);
+    }
+
+    //get all expenses from a user
+    @GetMapping("/filterExpenseByUser/{userId}")
+    List<Expense> gellAllExpensesByUserId(
+            @PathVariable Integer userId
+    ) {
+        userRepository.findById(userId)
+                .orElseThrow(()->new BadRequestException("The selected user does not exist"));
+
+        return expenseRepository.findAllByUserId(userId);
     }
 }

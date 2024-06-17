@@ -6,7 +6,7 @@ public class AddUserDto {
     String city;
     String job;
     double salary;
-    double remainingSalary;
+    //double remainingSalary;
 
     public String getName() {
         return name;
@@ -48,7 +48,7 @@ public class AddUserDto {
         this.salary = salary;
     }
 
-    public double getRemainingSalary() {
-        return remainingSalary;
-    }
+//    public double getRemainingSalary() {
+//        return remainingSalary;
+//    }
 }
