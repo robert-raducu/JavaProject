@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/CategoryPage")
@@ -53,7 +54,9 @@ public class CategoryController {
                 .orElseThrow(()-> new BadRequestException("No category" +
                         "available for this id: " + id));
 
-        updatedCategory.setName(updateDto.getName());
+        if (!Objects.equals(updateDto.getName(), "string")) {
+            updatedCategory.setName(updateDto.getName());
+        }
 
         return categoryRepository.save(updatedCategory);
     }

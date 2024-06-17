@@ -2,6 +2,8 @@ package com.java_project.JavaProject.api.controller;
 
 import com.java_project.JavaProject.api.dto.userDto.AddUserDto;
 import com.java_project.JavaProject.api.dto.userDto.UpdateUserDto;
+import com.java_project.JavaProject.domain.analytics.UserStatistics;
+import com.java_project.JavaProject.domain.analytics.UserStatisticsRepository;
 import com.java_project.JavaProject.domain.expense.Expense;
 import com.java_project.JavaProject.domain.expense.ExpenseRepository;
 import com.java_project.JavaProject.domain.user.User;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/UserPage")
@@ -18,10 +21,12 @@ public class UserController {
 
     final UserRepository userRepository;
     final ExpenseRepository expenseRepository;
+    final UserStatisticsRepository userStatisticsRepository;
 
-    public UserController(UserRepository userRepository, ExpenseRepository expenseRepository) {
+    public UserController(UserRepository userRepository, ExpenseRepository expenseRepository, UserStatisticsRepository userStatisticsRepository) {
         this.userRepository = userRepository;
         this.expenseRepository = expenseRepository;
+        this.userStatisticsRepository = userStatisticsRepository;
     }
 
     @GetMapping
@@ -61,12 +66,26 @@ public class UserController {
         User updatedUser = userRepository.findById(id)
                 .orElseThrow(()-> new BadRequestException("No user found with id: " + id));
 
-        updatedUser.setName(updateDto.getName());
-        updatedUser.setAge(updateDto.getAge());
-        updatedUser.setCity(updateDto.getCity());
-        updatedUser.setJob(updateDto.getJob());
-        updatedUser.setSalary(updateDto.getSalary());
-        updatedUser.setRemainingSalary(updateDto.getRemainingSalary());
+        if (!Objects.equals(updateDto.getName(), "string")) {
+            updatedUser.setName(updateDto.getName());
+        }
+        if (updateDto.getAge() != 0) {
+            updatedUser.setAge(updateDto.getAge());
+        }
+        if (!Objects.equals(updateDto.getCity(), "string")) {
+            updatedUser.setCity(updateDto.getCity());
+        }
+        if (!Objects.equals(updateDto.getJob(), "string")) {
+            updatedUser.setJob(updateDto.getJob());
+        }
+        if (updateDto.getSalary() != 0) {
+            updatedUser.setSalary(updateDto.getSalary());
+            // Adjust remaining salary based on new salary
+            // If you have specific logic to calculate remaining salary, add it here
+        }
+        if (updateDto.getRemainingSalary() != 0) {
+            updatedUser.setRemainingSalary(updateDto.getRemainingSalary());
+        }
 
         return userRepository.save(updatedUser);
     }
@@ -79,5 +98,17 @@ public class UserController {
         userRepository.delete(deletedUser);
         return ResponseEntity.ok("The user was successfully deleted!");
 
+    }
+
+    @GetMapping("/statistics")
+    public List<UserStatistics> getUsersStatistics(){
+        return userStatisticsRepository.getUsersStatistics();
+    }
+
+    @GetMapping("/statistics/{userId}")
+    public List<UserStatistics> getUserStatistics(@PathVariable Integer userId) {
+        userRepository.findById(userId)
+                .orElseThrow(()-> new BadRequestException("No user found with id: " + userId));
+        return userStatisticsRepository.getUserStatisticsByUserId(userId);
     }
 }
